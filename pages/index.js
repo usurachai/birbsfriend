@@ -43,28 +43,32 @@ export default function Home() {
     const [content, setContent] = useState("");
     const [address, setAddress] = useState(null);
     const [type, setType] = useState(undefined);
-    const [ipfs, setIpfs] = useState({
-        name: "Lorem Isam",
-        description: "Lorem Isam.",
-        image: "ipfs://QmZz2rp6829gpdjB9Ucb2FaSocZYMBxQmto5yZ1rN6n2gs",
-        external_url: "https://www.example.info/",
-        dna: "0x",
-        edition: 1,
-        date: 1650613719030,
-        attributes: [
-            {
-                trait_type: "Lorem Isem",
-                value: "Generating",
-            },
-        ],
-        compiler: "I don't tell you engine",
-    });
+    const [ipfs, setIpfs] = useState({});
+    // const [ipfs, setIpfs] = useState({
+    //     name: "Lorem Isam",
+    //     description: "Lorem Isam.",
+    //     image: "ipfs://QmZz2rp6829gpdjB9Ucb2FaSocZYMBxQmto5yZ1rN6n2gs",
+    //     external_url: "https://www.example.info/",
+    //     dna: "0x",
+    //     edition: 1,
+    //     date: 1650613719030,
+    //     attributes: [
+    //         {
+    //             trait_type: "Lorem Isem",
+    //             value: "Generating",
+    //         },
+    //     ],
+    //     compiler: "I don't tell you engine",
+    // });
     const [minted, setMinted] = useState(false);
 
     const { status, connect, account, chainId, ethereum } = useMetaMask();
 
     useEffect(() => {
-        hanleConnect(status);
+        if (play) {
+            hanleConnect(status);
+        }
+
         if (account) {
             setType(checkType());
         }
