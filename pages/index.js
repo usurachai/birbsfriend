@@ -249,7 +249,15 @@ export default function Home() {
                                 // setContent("Free mint for stardust holders...");
                                 hanleConnect(status);
                             }}
-                        ></div>
+                        >
+                            <div
+                                className={`${
+                                    play ? "invisible" : "visible"
+                                } h-full flex justify-center items-center font-extrabold  text-4xl z-20 font-PixeloidMono text-green-500`}
+                            >
+                                Click Me
+                            </div>
+                        </div>
                     </div>
 
                     {/* mint */}
