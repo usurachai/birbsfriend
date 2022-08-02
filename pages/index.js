@@ -274,7 +274,7 @@ export default function Home() {
                         <div
                             className={`${
                                 play ? "opacity-90" : "opacity-0"
-                            } bg-[url('/Template.png')]  h-full bg-cover opacity-80 font-PixeloidMono text-green-400 transition-opacity duration-500 ease-out `}
+                            } bg-[url('/Template.png')]  h-full bg-cover font-PixeloidMono text-green-400 transition-opacity duration-500 ease-out `}
                         >
                             {/* header */}
                             <p className="text-3xl px-8 py-5">{header}</p>
