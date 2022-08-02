@@ -65,14 +65,16 @@ export default function Home() {
     const { status, connect, account, chainId, ethereum } = useMetaMask();
 
     useEffect(() => {
-        if (play) {
-            hanleConnect(status);
+        if (!play) {
+            return;
         }
+
+        hanleConnect(status);
 
         if (account) {
             setType(checkType());
         }
-    }, [status, chainId, account]);
+    }, [status, chainId, account, play]);
 
     const checkType = () => {
         if (investor.find((i) => i.toUpperCase() === account.toUpperCase())) {
@@ -118,7 +120,8 @@ export default function Home() {
 
         if (status === "initializing") {
             setContent("Synchronisation with MetaMask ongoing...");
-        } else if (status === "unavailable") setAddr("MetaMask not available");
+        } else if (status === "unavailable")
+            setContent("MetaMask not available");
         else if (status === "notConnected") {
             setContent("Connect to MetaMask");
             connect();
