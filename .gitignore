@@ -30,3 +30,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# whitelist
+wl_*.json
+
+# contracts
+contracts/.deps/
