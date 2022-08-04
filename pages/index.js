@@ -240,7 +240,7 @@ export default function Home() {
                 <meta name="description" content="Birbsfriend" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="h-screen flex justify-center items-center">
+            <div className="h-screen flex justify-center items-center min-w-[1280px]">
                 <div className="w-[1280px] h-[800px] bg-cover bg-no-repeat bg-[url('/Bg.png')] relative">
                     {/* machine */}
                     <div className="w-[421px] h-[410px] absolute top-[236px] left-[85px]">
