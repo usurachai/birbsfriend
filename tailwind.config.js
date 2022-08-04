@@ -9,6 +9,9 @@ module.exports = {
             fontFamily: {
                 PixeloidMono: ["PixeloidMono"],
             },
+            animation: {
+                bounce_3: "bounce 0.6s infinite",
+            },
         },
     },
     plugins: [],

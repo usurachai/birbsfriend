@@ -41,7 +41,6 @@ export default function Home() {
     const [play, setPlay] = useState(false);
     const [header, setHeader] = useState("");
     const [content, setContent] = useState("");
-    const [address, setAddress] = useState(null);
     const [type, setType] = useState(undefined);
     const [ipfs, setIpfs] = useState({});
     // const [ipfs, setIpfs] = useState({
@@ -153,24 +152,18 @@ export default function Home() {
 
     const mint = async () => {
         setHeader("Status");
-        // if (status === "notConnected") {
-        //     connect();
-        // }
-        console.log(chainId, CHAIN_ID);
 
         if (chainId != CHAIN_ID) {
             setContent(`Please switch to ${CHAIN}`);
             return;
         }
 
-        if (type == undefined) {
-            setHeader("Warning");
-            setContent(`You are not in our whitelist`);
-            // setContent(
-            //     "Proident eiusmod dolor adipisicing irure tempor sunt elit. Ad eiusmod tempor qui sit sint id dolor do anim minim adipisicing proident. Excepteur esse incididunt sit dolore tempor ea aliqua Lorem quis dolore ut. Duis incididunt ea anim tempor aliquip cillum sunt dolore officia id amet aliqua. Pariatur labore nisi eiusmod non laborum tempor duis nostrud sit. Pariatur reprehenderit exercitation ullamco nostrud Lorem ea voluptate velit labore. Minim nostrud eiusmod laboris fugiat nostrud exercitation fugiat fugiat veniam do incididunt ad sit amet."
-            // );
-            return;
-        }
+        // if (type == undefined) {
+        //     setHeader("Warning");
+        //     setContent(`You are not in our whitelist`);
+
+        //     return;
+        // }
         setContent("Minting...");
         setMinted(false);
 
@@ -184,14 +177,17 @@ export default function Home() {
             whiteListAddressesLeaves = holder.map((x) => keccak256(x));
         } else if (type == "friend") {
             whiteListAddressesLeaves = friend.map((x) => keccak256(x));
+        } else {
+            whiteListAddressesLeaves = [];
         }
+        // console.log(whiteListAddressesLeaves);
 
         const tree = new MerkleTree(whiteListAddressesLeaves, keccak256, {
             sortPairs: true,
         });
         const hashedAddress = keccak256(account);
         const proof = tree.getHexProof(hashedAddress);
-        console.log(proof);
+        // console.log(proof);
 
         try {
             const { ethereum } = window;
@@ -204,15 +200,18 @@ export default function Home() {
                     signer
                 );
                 const cost = await nftContract.cost();
-                console.log(cost);
+                // console.log(cost);
                 // console.log("cost: ", ethers.utils.formatUnits(cost, "ether"));
 
-                let nftTxn = await nftContract.Mint(proof, {
-                    value: ethers.utils.parseEther(cost.toString()),
-                });
+                let nftTxn = await nftContract.Mint(
+                    type !== undefined ? proof : [],
+                    {
+                        value: ethers.utils.parseEther(cost.toString()),
+                    }
+                );
 
                 const receipt = await nftTxn.wait();
-                console.log(receipt);
+                // console.log(receipt);
                 if (receipt.status == 1) {
                     const _totalsupply = await nftContract.totalSupply();
                     // console.log(_totalsupply);
@@ -240,26 +239,29 @@ export default function Home() {
                 <meta name="description" content="Birbsfriend" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="h-screen flex justify-center items-center min-w-[1280px]">
+            <div className="h-screen flex justify-center items-center min-w-[1280px] min-h-[800px]">
                 <div className="w-[1280px] h-[800px] bg-cover bg-no-repeat bg-[url('/Bg.png')] relative">
                     {/* machine */}
                     <div className="w-[421px] h-[410px] absolute top-[236px] left-[85px]">
                         <div
                             className={`${
-                                play
-                                    ? "bg-[url('/Machine2.gif')]"
-                                    : "bg-[url('/Machine1.gif')]"
+                                play == false || minted == true
+                                    ? "bg-[url('/Machine1.gif')]"
+                                    : "bg-[url('/Machine2.gif')]"
                             } bg-cover h-full hover:cursor-pointer`}
                             onClick={() => {
                                 setPlay(!play);
                                 // setHeader("Derivative Art");
                                 // setContent("Free mint for stardust holders...");
+                                setIpfs({});
                                 hanleConnect(status);
                             }}
                         >
                             <div
                                 className={`${
-                                    play ? "invisible" : "visible"
+                                    play == true || minted == true
+                                        ? "invisible"
+                                        : "visible"
                                 } h-full flex justify-center items-center font-extrabold  text-4xl z-20 font-PixeloidMono text-green-500`}
                             >
                                 Click Me
@@ -301,8 +303,10 @@ export default function Home() {
 
                     <div
                         className={`${
-                            minted ? "opacity-100 z-10" : "opacity-0 -z-10"
-                        } absolute top-[324px] left-[152px] w-[263px] h-[226px] transition-opacity duration-500 ease-out`}
+                            minted == true && play == true
+                                ? "opacity-100 z-10"
+                                : "opacity-0 -z-10"
+                        } absolute top-[324px] left-[152px] w-[263px] h-[227px] transition-opacity duration-500 ease-out animate-pulse`}
                     >
                         {ipfs.image && (
                             <Image
